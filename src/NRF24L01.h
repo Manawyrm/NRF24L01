@@ -496,8 +496,7 @@ THE SOFTWARE.
 	extern void		NRF24L01_set_channel(uint8_t channel);
 	extern void		NRF24L01_enable_dyn_pld(uint8_t enable);
 	extern void		NRF24L01_enable_ack_pld(uint8_t enable);
-	extern void		NRF24L01_enable_dyn_ack(uint8_t enable);extern void	NRF24L01_print_details();
-
+	extern void		NRF24L01_enable_dyn_ack(uint8_t enable);
 	extern void		NRF24L01_enable_dyn_pld_pipe(uint8_t pipe, uint8_t state);
 	extern void		NRF24L01_power_up(void);
 	extern void		NRF24L01_power_down(void);
