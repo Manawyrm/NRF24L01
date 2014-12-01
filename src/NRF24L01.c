@@ -375,6 +375,27 @@ void NRF24L01_LOW_read_register(uint8_t regaddr, uint8_t* data, uint8_t len)
 	NRF24L01_CSN_HIGH;
 }
 
+
+///Sets multi byte registers in the NRF24L01
+///Puts all bytes in LSByte first. nRF Datasheet specifies addresses as LSByte first
+void NRF24L01_LOW_write_register_lsb(uint8_t regaddr, uint8_t* data, uint8_t len)
+{
+	NRF24L01_CSN_LOW;
+	spi_fast_shift(NRF24L01_CMD_W_REGISTER | regaddr);
+	spi_transmit_sync_lsb(data, len);
+	NRF24L01_CSN_HIGH;
+}
+
+///Reads multi byte registers from the NRF24L01
+///Puts all bytes in LSByte first. nRF Datasheet specifies addresses as LSByte first
+void NRF24L01_LOW_read_register_lsb(uint8_t regaddr, uint8_t* data, uint8_t len)
+{
+	NRF24L01_CSN_LOW;
+	spi_fast_shift(NRF24L01_CMD_R_REGISTER | regaddr);
+	spi_transfer_sync_lsb(data, data, len);
+	NRF24L01_CSN_HIGH;
+}
+
 ///Sends a single one byte command to the NRF24L01 and gets the single byte response
 uint8_t NRF24L01_LOW_read_byte(uint8_t cmd)
 {

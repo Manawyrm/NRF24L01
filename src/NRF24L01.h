@@ -468,8 +468,11 @@ THE SOFTWARE.
 	void	NRF24L01_LOW_init_IO(void);
 	void	NRF24L01_LOW_set_register(uint8_t regaddr, uint8_t value);
 	uint8_t	NRF24L01_LOW_get_register(uint8_t regaddr);
+	void	NRF24L01_LOW_write_register_lsb(uint8_t regaddr, uint8_t* data, uint8_t len);
+	void	NRF24L01_LOW_read_register_lsb(uint8_t regaddr, uint8_t* data, uint8_t len);
 	void	NRF24L01_LOW_write_register(uint8_t regaddr, uint8_t* data, uint8_t len);
 	void	NRF24L01_LOW_read_register(uint8_t regaddr, uint8_t* data, uint8_t len);
+
 	uint8_t	NRF24L01_LOW_read_byte(uint8_t cmd);
 
 	//NRF24L01 high functions
