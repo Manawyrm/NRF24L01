@@ -275,13 +275,13 @@ void NRF24L01_enable_pipe(uint8_t pipe, uint8_t state)
 ///Sets the tx address of the NRF24L01
 void NRF24L01_set_tx_addr(uint8_t* addr, uint8_t len)
 {
-	NRF24L01_LOW_write_register(NRF24L01_REG_TX_ADDR, addr, len);
+	NRF24L01_LOW_write_register_lsb(NRF24L01_REG_TX_ADDR, addr, len);
 }
 
 ///Sets the rx address for the specified pipe
 void NRF24L01_set_rx_addr(uint8_t pipe, uint8_t* addr, uint8_t len)
 {
-	NRF24L01_LOW_write_register(NRF24L01_REG_RX_ADDR_P0 + pipe, addr, len);
+	NRF24L01_LOW_write_register_lsb(NRF24L01_REG_RX_ADDR_P0 + pipe, addr, len);
 }
 
 ///Sets the payload length for the specified pipe
