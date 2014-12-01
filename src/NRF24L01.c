@@ -284,6 +284,115 @@ void NRF24L01_set_rx_addr(uint8_t pipe, uint8_t* addr, uint8_t len)
 	NRF24L01_LOW_write_register_lsb(NRF24L01_REG_RX_ADDR_P0 + pipe, addr, len);
 }
 
+#ifdef __UART_LIB_H__
+	extern void NRF24L01_print_details(void)
+	{
+		// Statusbyte
+		uart_write_async("STATUS: 0x");
+		UART_send_hex(NRF24L01_get_status());
+		uart_write_async("\n");
+
+		// RX Address 
+		uart_write_async("RX_ADDR_P0: 0x");
+		UART_send_NRF_register(NRF24L01_REG_RX_ADDR_P0, 5);
+		uart_write_async("\n");
+
+		uart_write_async("RX_ADDR_P1: 0x");
+		UART_send_NRF_register(NRF24L01_REG_RX_ADDR_P1, 5);
+		uart_write_async("\n");
+
+		for (int i = 2; i < 6; i++)
+		{
+			uart_write_async("RX_ADDR_P");
+			uart_send_byte('0' + i);
+			uart_write_async(": 0x");
+			UART_send_NRF_register(NRF24L01_REG_RX_ADDR_P1, 4);
+			UART_send_NRF_register(NRF24L01_REG_RX_ADDR_P0 + i, 1);
+			uart_write_async("\n");
+			_delay_ms(10);
+		}
+		
+		_delay_ms(10);
+
+		// TX Adress
+		uart_write_async("TX_ADDR: 0x");
+		UART_send_NRF_register(NRF24L01_REG_TX_ADDR, 5);
+		uart_write_async("\n");
+
+		for (int i = 0; i < 6; i++)
+		{
+			uart_write_async("RX_PW_P");
+			uart_send_byte('0' + i);
+			uart_write_async(": 0x");
+			UART_send_NRF_register(NRF24L01_REG_RX_PW_P0 + i, 1);
+			uart_write_async("\n");
+			_delay_ms(10);
+		}
+
+		uart_write_async("EN_AA: 0x");
+		UART_send_NRF_register(NRF24L01_REG_EN_AA, 1);
+		uart_write_async("\n");
+
+		uart_write_async("EN_RXADDR: 0x");
+		UART_send_NRF_register(NRF24L01_REG_EN_RXADDR, 1);
+		uart_write_async("\n");
+
+		_delay_ms(10);
+
+		uart_write_async("RF_CH: 0x");
+		UART_send_NRF_register(NRF24L01_REG_RF_CH, 1);
+		uart_write_async("\n");
+
+		uart_write_async("RF_SETUP: 0x");
+		UART_send_NRF_register(NRF24L01_REG_RF_SETUP, 1);
+		uart_write_async("\n");
+
+		uart_write_async("CONFIG: 0x");
+		UART_send_NRF_register(NRF24L01_REG_CONFIG, 1);
+		uart_write_async("\n");
+
+		_delay_ms(10);
+
+
+		uart_write_async("DYNPD: 0x");
+		UART_send_NRF_register(NRF24L01_REG_DYNPD, 1);
+		uart_write_async("\n");
+
+		uart_write_async("FEATURE: 0x");
+		UART_send_NRF_register(NRF24L01_REG_FEATURE, 1);
+		uart_write_async("\n");
+
+	}
+	void UART_send_NRF_register(uint8_t address, uint8_t length)
+	{
+		char *buffer = malloc(length);
+			NRF24L01_LOW_read_register_lsb(address, buffer, length);
+			UART_send_hex_array(buffer, length);
+		free(buffer);
+	}
+	void UART_send_hex_array(uint8_t* bytes, uint16_t length)
+	{
+		for (int i = 0; i < length; i++)
+		{
+			UART_send_hex(bytes[i]);
+		}
+	}
+	void UART_send_hex(uint8_t byte)
+	{
+		char *buffer = malloc(3);
+
+		if (buffer == NULL)
+			return;
+
+		sprintf(buffer, "%02X", byte);
+		uart_write_async(buffer);
+
+		free(buffer);
+	}
+#endif
+
+
+
 ///Sets the payload length for the specified pipe
 void NRF24L01_set_payload_width(uint8_t pipe, uint8_t width)
 {
